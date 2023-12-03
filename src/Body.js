@@ -11,7 +11,8 @@ function Body(props) {
 const [data, setData] = useState([]); 
 const [cross_id, setId] = useState([]);
 let [lenght, setLength] = useState();
-
+const content = loading ? <Preloader/> : <div id='empty'></div>
+  
 useEffect(() => {
   //console.log(cross_id.length);
   const arr_id = [];
@@ -25,6 +26,7 @@ useEffect(() => {
       const results = await Promise.all(proms);
       const peoples = results.map(item => item.data);
       setData(peoples);
+      setLoading(false);
 
       for (let i = 0; i < peoples.length; i++) {
         arr_id.push(peoples[i].id);
@@ -36,7 +38,8 @@ useEffect(() => {
         for (let i = 0; i < records.data.length; i++) {
           proms.push(records.data[i]); 
         }
-        setData(proms);  
+        setData(proms); 
+        setLoading(false);
 
         for (let i = 0; i < proms.length; i++) {
           arr_id.push(proms[i].id);
@@ -50,6 +53,7 @@ useEffect(() => {
   
   return (
     <div className='ProductList'>
+    {content}
       {data.map((elem) => (
        <Component key={elem.id} elem={elem} id={elem.id} setLength={setLength}/>
       ))}
